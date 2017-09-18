@@ -1,4 +1,3 @@
-# $: << "E:/Ruby22/test/pcap/IP_deceive"
 load 'config.rb'
 # i=0
 # P.dump_devices.each{|it| puts i,it; i+=1}
@@ -33,8 +32,7 @@ EM::run{
 			rescue Exception => e
 				puts color_red("出错！")
 				puts e.message  
-  				msg = e.backtrace
-  				puts msg
+  				puts e.backtrace
 				next
 			end
 		end
