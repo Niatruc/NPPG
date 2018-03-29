@@ -11,16 +11,31 @@ class IPv4H
 	end
 
 	define_field_func({version:4, head_len:4, tos:8, total_len:16,
-						id:16, flags:3, frag_offset:13,
-						ttl:8, protocol:8, checksum:16,
-						src_addr:32,
-						dst_addr:32,
-						opt_padding:32}) do |f, len|
-					 	case f 
-					 	when :head_len,:total_len,:frag_offset
-					 		decimal_format(f,len)
-					 	end
-					 end
+			   id:16, flags:3, frag_offset:13,
+			   ttl:8, protocol:8, checksum:16,
+			   src_addr:32,
+			   dst_addr:32,
+			   opt_padding:32}) do |f, len|
+				case f 
+				when :head_len,:total_len,:frag_offset
+					decimal_format(f,len)
+				end
+			   end
 
 end
+
+# initialize the instance of this class, and get or set one of its field
+ih = IPv4H.new
+
+# set value by decimal
+ih.version = 4 
+
+# by '01' like str which represents a binary value
+ih.flags = "010"
+
+# by an array which elements are all decimal smaller than 256 (it means that each decimal represents a byte value)
+ih.src_addr = [192,168,1,1]
+
+# get field's value by decimal format
+puts ih.head_len
 ```
