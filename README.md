@@ -1,6 +1,6 @@
 # NPPG
 Network Protocol Package Generator. I have tried to develop it to a framework. 
-* You can simply define a ruby class for a network protocol and pass something like `{field1: field1_length}` to a method(as the example belows shows) to define the data format of this protocol's head, then NPPG will generate the class for this protocol's head, which contains powerful getter and setter for each field. 
+* You can simply define a ruby class for a network protocol and pass something like `{field1: field1_length}` to a method(as the example below shows) to define the data format of this protocol's head, then NPPG will generate the class for this protocol's head, which contains powerful getter and setter for each field. 
 ```ruby
 # example: define a class for IPv4 protocol's head
 require_relative 'common'
