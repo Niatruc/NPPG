@@ -1,6 +1,7 @@
 require_relative 'common.rb'
 
 class DNSH
+	include Common
 	def initialize(bit_num=8*12)
 		ini(bit_num)
 	end

@@ -15,8 +15,8 @@ class IPv4P < EtherP
 	 		# @ipv4h.frag_offset = ""
 		 	@ipv4h.ttl = "11111111"
 	 		@ipv4h.protocol = "00000110" #tcp协议
-		 	@ipv4h.set_addr_by_arr($src_ip, :src)
-		 	@ipv4h.set_addr_by_arr($dst_ip, :dst)
+		 	@ipv4h.set_addr_by_arr(CONFIG[:src_ip], :src)
+		 	@ipv4h.set_addr_by_arr(CONFIG[:dst_ip], :dst)
 		 	# @ipv4h.opt_padding = "" 
 		 	@ipv4h.set_check_sum()
 	end

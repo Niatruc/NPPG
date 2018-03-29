@@ -5,7 +5,7 @@ class TCPP
 		to_seq = from_seq+2**32
 
 		rst_pac = TCPP.pac_from_pac(TCPP.new){|pac|
-			pac.ipv4h.set_addr_by_arr($victim_ip, :src)
+			pac.ipv4h.set_addr_by_arr(CONFIG[:victim_ip], :src)
 			pac.tcph.control_flag = "00000100"
 		}
 

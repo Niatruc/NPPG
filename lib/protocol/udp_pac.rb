@@ -7,8 +7,8 @@ class UDPP<IPv4P
 		super
 		@app_data = ""
 		@udph = UDPH.new
-			@udph.src_port = $src_port
-			@udph.dst_port = $dst_port
+			@udph.src_port = CONFIG[:src_port]
+			@udph.dst_port = CONFIG[:dst_port]
 			@udph.length = 4*2 + @app_data.length/8
 			@udph.set_check_sum
 

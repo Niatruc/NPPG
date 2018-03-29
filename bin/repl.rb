@@ -9,9 +9,9 @@ while (exp=readline)!="ok\n" #输入ok时退出repl
 			while (exp=readline)!="ok\n" #输入ok时退出多行模式
 				str << exp
 			end
-			eval str
+			p eval str
 		else
-			eval "p "+exp
+			p eval exp
 		end
 	rescue Exception => e
 		puts e

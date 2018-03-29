@@ -4,11 +4,11 @@ require_relative '../support/kernel.rb'
 class TCPP
 	# TCP端口扫描
 	def self.tcp_port_scan(pcap, port_range=(0..1024))
-		dst_ip = arr_to_dot_dec($victim_ip)
+		dst_ip = arr_to_dot_dec(CONFIG[:victim_ip])
 		pcap.set_filter("src host #{dst_ip} and tcp")
 
 		sp = TCPP.syn_pac{|pac|
-			pac.ipv4h.set_addr_by_arr($victim_ip, :dst)
+			pac.ipv4h.set_addr_by_arr(CONFIG[:victim_ip], :dst)
 		}
 
 		print color_blue("开始对"), dst_ip, color_blue("进行TCP端口扫描"), "\n"

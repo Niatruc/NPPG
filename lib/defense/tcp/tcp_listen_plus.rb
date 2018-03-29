@@ -2,7 +2,7 @@ require_relative '../../protocol/tcp_pac.rb'
 
 class TCPP
 	def self.tcp_listen_plus(pcap, port)
-		pcap.setfilter("tcp and dst host #{arr_to_dot_dec($src_ip)} and dst port #{port}")
+		pcap.setfilter("tcp and dst host #{arr_to_dot_dec(CONFIG[:src_ip])} and dst port #{port}")
 
 		syn_pac = nil
 		ini_port = 0 #对端原先使用的端口
@@ -26,10 +26,10 @@ class TCPP
 		dst_ip = arr_to_dot_dec(bit_str_to_int_arr(syn_pac.tcph.src_addr))  #得到请求连接者的IP的点分十进制字符串
 		dst_port = syn_pac.tcph.src_port_decimal  #得到请求连接者使用的端口号
 		pcap.set_filter("tcp
-						 and dst host #{arr_to_dot_dec($src_ip)} and dst port #{port}
+						 and dst host #{arr_to_dot_dec(CONFIG[:src_ip])} and dst port #{port}
 						 and src host #{dst_ip} and src port #{probe_port}")
 
-		sleep($max_rtt)
+		sleep(CONFIG[:max_rtt])
 
 		pcap.dispatch do |this, pkt|
 			ack_pac = TCPP.pac_from_pac(probe_pac){|p2|

@@ -50,7 +50,7 @@ module Kernel
 	end
 
 	def run(&blk)
-		if $iso # 独立运行
+		if CONFIG[:iso] # 独立运行
 			blk.call
 		else # 放在EM中运行
 			EM::defer{blk.call}
@@ -74,26 +74,67 @@ module Kernel
 		# end
 	end
 
+	# 这个表示mark
 	def m(context=nil); print color_white_b(color_black("#{context}")),'>> ' end
 
-	def repl
-		exp=nil
-		m("[ruby]")
-		while (exp=readline)!="ok\n" #输入ok时退出repl
+	def new_process(options, &blk)
+		$config = CONFIG || nil
+
+		vars = {} 
+		options[:vars].each do |k, v|
+			vars[k] = v[0]
+		end
+
+		desc = {} 
+		options[:vars].each do |k, v|
+			desc[k] = v[1]
+		end
+
+		while true
+			m options[:title]
+			input = readline.chop
 			begin
-				if exp == "ml\n" #多行输入
-					str = ""
-					while (exp=readline)!="ok\n" #输入ok时退出多行模式
-						str << exp
+				case input
+				when "quit"
+					break
+				when "show-options"
+					print "名称			值			含义\n"
+					options[:vars].each do |var, arr|
+						val = arr[0]
+						if val.class <= String
+							val = "\"#{val}\""
+						end
+						print "#{var}			#{val}			#{arr[1]}\n"
 					end
-					eval str
-				else
-					eval "p "+exp
+				when "show-configs"
+					puts "名称			值"
+					$config.each do |k, v|
+						puts "#{k}			#{v}"
+					end
+				when /^(\w+)\s+(\w+)\s+(.+)/
+					p md = /^(\w+)\s+(\w+)\s+(.+)/.match(input)
+
+					if nil == options[:vars][md[2].to_sym]
+						options[:vars][md[2].to_sym] = []
+					end
+
+					case md[1]
+					when "set"
+						options[:vars][md[2].to_sym][0] = vars[md[2].to_sym] = eval(md[3])
+					when "desc"
+						options[:vars][md[2].to_sym][1] = desc[md[2].to_sym] = md[3]
+					when "config"
+						$config[md[2].to_sym] = eval(md[3])
+					end
+				when "run"
+					run {
+						blk.call(vars)
+					}
 				end
 			rescue Exception => e
-				puts e
+				p e
+				puts e.backtrace.join("\n")  
 			end
-			m("[ruby]")
 		end
 	end
 
@@ -182,16 +223,16 @@ module Kernel
 	 	mac.unpack("C*").reduce(''){|s,v| s+=v.to_s(16)+':'}.chop
 	 end
 
-	 def check_sum(str)
-		checksum = "0000000000000000"
-		sum = 0
-		str = str.dup
-		while !str.empty?
-			sum = sum.bsum(str.slice!(0,16).to_i(2), 16)
-		end
-		# np = ~sum<0 ? '1' : '0'
-		# sum = [~sum].pack("C*")[0].unpack("B*")[0]
-		sum = sum.complement_str
-		checksum = sum
-	end
+	#  def check_sum(str)
+	# 	checksum = "0000000000000000"
+	# 	sum = 0
+	# 	str = str.dup
+	# 	while !str.empty?
+	# 		sum = sum.bsum(str.slice!(0,16).to_i(2), 16)
+	# 	end
+	# 	# np = ~sum<0 ? '1' : '0'
+	# 	# sum = [~sum].pack("C*")[0].unpack("B*")[0]
+	# 	sum = sum.complement_str
+	# 	checksum = sum
+	# end
 end

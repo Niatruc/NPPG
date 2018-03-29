@@ -8,7 +8,7 @@ class TCPP < IPv4P
 		@app_data = ""
 		@tcph = TCPH.new
 		 		@tcph.src_port = rand(1..65535)
-		 		@tcph.dst_port = $dst_port
+		 		@tcph.dst_port = CONFIG[:dst_port]
 		 		@tcph.seq_num = 0x44444444
 		 		@tcph.ack_num = 0x00000000
 		 		# @tcph.data_offset = "0101"

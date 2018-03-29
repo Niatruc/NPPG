@@ -12,10 +12,10 @@ class ARPP<EtherP
 			@arph.hlen = 6
 			@arph.plen = 4
 			@arph.opcode = 1
-			@arph.set_mac_by_str($src_mac, :sender)
-			@arph.set_addr_by_arr($src_ip, :sender)
+			@arph.set_mac_by_str(CONFIG[:src_mac], :sender)
+			@arph.set_addr_by_arr(CONFIG[:src_ip], :sender)
 			@arph.set_mac_by_str("\x00\x00\x00\x00\x00\x00", :receiver)
-			@arph.set_addr_by_arr($dst_ip, :receiver)
+			@arph.set_addr_by_arr(CONFIG[:dst_ip], :receiver)
 
 		@etherh.dst_mac = "\xff\xff\xff\xff\xff\xff"
 		@etherh.protocol = "\x08\x06"

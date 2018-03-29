@@ -7,8 +7,8 @@ class TCPP
 		to_seq = from_seq+2**32
 
 		rst_pac = TCPP.pac_from_pac(TCPP.new){|pac|
-			pac.etherh.src_mac = $victim_mac
-			pac.ipv4h.set_addr_by_arr($victim_ip, :src)
+			pac.etherh.src_mac = CONFIG[:victim_mac]
+			pac.ipv4h.set_addr_by_arr(CONFIG[:victim_ip], :src)
 			pac.tcph.control_flag = "00011000"
 			pac.set_app_data(payload)
 		}

@@ -1,4 +1,4 @@
-LOAD_ALL=false
+LOAD_ALL=true
 require_relative 'lib/support/kernel.rb'
 require_relative 'config_con_var.rb'
 require_relative 'help.rb'

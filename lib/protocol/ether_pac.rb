@@ -8,8 +8,8 @@ class EtherP < FFI::PCap::Packet
 	def initialize
 		packet = super(nil,"")
 		@etherh = EtherH.new
-			@etherh.src_mac = $src_mac
-			@etherh.dst_mac = $dst_mac
+			@etherh.src_mac = CONFIG[:src_mac]
+			@etherh.dst_mac = CONFIG[:dst_mac]
 			@etherh.protocol = "\x08\x00" #ipv4
 
 		@app_data = ""

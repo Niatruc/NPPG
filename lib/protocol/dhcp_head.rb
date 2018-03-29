@@ -82,8 +82,8 @@ class DHCPH
 		@opts=[]
 		@opts_str=""
 		[{type:53, len:1, dhcp_msg_type:3},
-		 {type:61, len:7, hw_type:0x01,client_mac:$src_mac},
-		 {type:50, len:4, requested_ip:$src_ip},
+		 {type:61, len:7, hw_type:0x01,client_mac:CONFIG[:src_mac]},
+		 {type:50, len:4, requested_ip:CONFIG[:src_ip]},
 		 {type:12, len:25, host_name:"zhangbohanPC-20130902QBLV"},
 		 {type:81, len:28, flags:0x00, a_rr:0, ptr_rr:0, client_name:"zhangbohanPC-20130902QBLV"},
 		 {type:60, len:8, vender_class:"MSFT 5.0"},

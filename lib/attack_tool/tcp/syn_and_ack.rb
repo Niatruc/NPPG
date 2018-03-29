@@ -2,12 +2,12 @@ require_relative '../../protocol/tcp_pac.rb'
 class TCPP
 	def self.syn_and_ack(pcap, scale=10)
 		syn_pac = TCPP.syn_pac{|pac| 
-			pac.tcph.src_port = $victim_port
+			pac.tcph.src_port = CONFIG[:victim_port]
 		}
 		
-		p s = arr_to_dot_dec($dst_ip)
+		p s = arr_to_dot_dec(CONFIG[:dst_ip])
 
-		pcap.setfilter("src host #{arr_to_dot_dec($dst_ip)} and src port #{$dst_port}")
+		pcap.setfilter("src host #{arr_to_dot_dec(CONFIG[:dst_ip])} and src port #{CONFIG[:dst_port]}")
 		count = 0
 		last_num = num_diff = 0
 		last_time = Time.now

@@ -3,9 +3,9 @@ require_relative '../../protocol/tcp_pac.rb'
 class TCPP
 	def self.ip_deceive(pcap, isn, deviate_range, data, rtt=1)
 		pac = TCPP.syn_pac{|pac|
-			pac.etherh.src_mac = $victim_mac
-			pac.ipv4h.set_addr_by_arr($victim_ip, :src)
-			pac.tcph.src_port = $src_port
+			pac.etherh.src_mac = CONFIG[:victim_mac]
+			pac.ipv4h.set_addr_by_arr(CONFIG[:victim_ip], :src)
+			pac.tcph.src_port = CONFIG[:src_port]
 		}
 		pac2 = TCPP.pac_from_pac(pac, :new){|p2|
 			p2.tcph.seq_num = p2.tcph.seq_num_decimal+1

@@ -2,9 +2,6 @@ require_relative '../config_con_var.rb'
 require_relative '../lib/attack_tool/arp/arp_deceive.rb'
 require_relative '../lib/protocol/tcp_pac.rb'
 
-# pcap = L.new(dev:P.dump_devices[$if_num][0])
-# redo_time, scale = ARGV[0].to_i, ARGV[1].to_i
-
 puts color_azure("输入攻击次数: ")
 redo_time = read_num
 puts color_azure("输入每次攻击发送包数目: ")
