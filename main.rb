@@ -4,7 +4,7 @@ list = $list.sort_by{|k, v| v[1]}	#转成数组
 
 # Dir.open("bin"){|d| d.each{|f| list<<f.sub(/\.rb/,'') if f.include?(".rb")}}
 
-CONFIG[iso] = false
+CONFIG[:iso] = false
 
 EM::run{
 	ignore_exception{
