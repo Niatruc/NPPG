@@ -85,21 +85,23 @@ pac1.arph.sender_ip
 * /bin: contains command line programs such as scanners
 * /lib
 	* /attack_tool: attacking methods are written in files under this directory
-	* /protocol: class for network protocols are written in files under this directory
-		* common.rb: define a ruby module named `Common` that should be included by every protocol head's class
-		* common_pac.rb: define a ruby module named `CommonPac` that should be included by every protocol packet's class (I mean the classes which instances would contains completed data for a network protocol packet, like `ARPP` that is described above)
+	* /protocol: classes for network protocols are written in files under this directory
+		* common.rb: define a ruby module named `Common` that should be included by every protocol head's class (For convenience, I would call it "Head Class" afterwards)
+		* common_pac.rb: define a ruby module named `CommonPac` that should be included by every protocol packet's class (I mean the classes which instances would contains completed data for a network protocol packet, like `ARPP` that is described above) (For convenience, I would call it "Packet Class" afterwards)
 	* /scanner: contains files that implement scanner's methods
 	* /support: contains files that extend native ruby classes, and other useful classes or modules
 * /test: contains test cases
 * config_con_var.rb: used to set some global variables
 * config.rb: files that are required while run main.rb are required here
-* help.rb: help infomation for command line programs is written here
-* main.rb: a command line program that could invoke  other command line programs in `/bin`
+* help.rb: help information for command line programs is written here
+* main.rb: a command line program that could invoke other command line programs in `/bin`
 
 ## Getting Started
-1. Install ruby interpreter. Click to redirect to [Ruby's official website](http://www.ruby-lang.org/en/downloads/).
+1. Install ruby interpreter. Click to redirect to [Ruby's official website](http://www.ruby-lang.org/en/downloads/). You'd better add its bin into System path after installing 
 2. Download Pcap library into your OS.
 * [For Windows](https://www.winpcap.org/)
 * [For Unix-like OS](http://www.tcpdump.org/)
-3. Install required ruby gems.
+3. Install required ruby gems. <br>
 `gem install ffi-pcap`
+4. You can run `main.rb` in command line. Type `help` to get help information that is defined in`help.rb`.
+5. You can define classes for network protocols that haven't been implementd in this project. A Head Class should be named with a suffix "H", while "P" for a Packet Class. As for the file's name, it may seem like "protocol1_head.rb" or "protocol1_pac.rb". You can refer to the implemented class such as IPv4H, IPv4P.
