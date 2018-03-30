@@ -69,7 +69,7 @@ class << ARPP
 	alias_method :build_arp_pac, :build_pac_from_str
 end
 ```
-If you execute the code `ARPP.build_pac_from_str(pkt.body)` (`pkt.body` means the acsii format data of a network packet), the instance of ARPP class (for example, pac1) will be created, and then you could get the fields' value of each protocol by accessing the member of pac1:
+If you execute the code `ARPP.build_pac_from_str(pkt.body)` (`pkt.body` means the acsii format data of a network packet), the instance of ARPP class (for example, pac1) will be created, and then you could get the fields' value of each protocol by accessing the members of pac1:
 ```ruby
 pac1 = ARPP.build_pac_from_str(pkt.body)
 
@@ -80,6 +80,16 @@ pac1.arph.sender_ip
 * Build some network scanners. (To scan ip address of the machines in a LAN, to scan opening TCP port of a computer, etc.)
 * Build some attack tools. (Like arp deception, flooding attack, etc.)
 * Anything else that you might come up with.
+
+## Directory Tree Of NPPG
+>NPPG
+>>bin
+>>lib
+>>test
+>>config_con_var.rb
+>>config.rb
+>>help.rb
+>>main.rb: a command line program that could invoke  other command line program in `\bin`
 
 ## Getting Started
 1. Install ruby interpreter. Click to redirect to [Ruby's official website](http://www.ruby-lang.org/en/downloads/).
