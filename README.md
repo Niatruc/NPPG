@@ -56,4 +56,4 @@ pac1 = IPv4P.new
 ```
 
 ## Getting Started
-1. Install ruby interpreter.[http://www.ruby-lang.org/en/downloads/]
+1. Install ruby interpreter.[Ruby's official website](http://www.ruby-lang.org/en/downloads/)
