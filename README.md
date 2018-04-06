@@ -104,4 +104,4 @@ pac1.arph.sender_ip
 3. Install required ruby gems. <br>
 `gem install ffi-pcap`
 4. You can run `main.rb` in command line. Type `help` to get help information that is defined in`help.rb`.
-5. You can define classes for network protocols that haven't been implementd in this project. A Head Class should be named with a suffix "H", while "P" for a Packet Class. As for the file's name, it may seem like "protocol1_head.rb" or "protocol1_pac.rb". You can refer to the implemented class such as IPv4H, IPv4P.
+5. You can define classes for network protocols that haven't been implementd in this project. A Head Class should be named with a suffix "H", while "P" for a Packet Class. As for a file's name, it may seem like "protocol1_head.rb" or "protocol1_pac.rb". You can refer to the implemented classes such as IPv4H, IPv4P.
