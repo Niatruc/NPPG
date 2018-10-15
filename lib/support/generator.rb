@@ -1,6 +1,6 @@
 module Generator
 	class << Generator
-		def generate_mac(scale,mac_model:"\xb8\x76\x3f\x14\x5e\x33")
+		def generate_mac(scale, mac_model:"\xb8\x76\x3f\x14\x5e\x33")
 			i=1
 
 			# 根据需要的假mac地址数scale算出mac_model中有几个字节需要动态变化
@@ -14,7 +14,7 @@ module Generator
 
 			f = ->(l, n, str="".force_encoding("ASCII-8BIT")){
 				str<<"#"	# 仅仅是一个填充字符
-				n.times{|i| 
+				n.times { |i| 
 					str.slice!(-1,1)	# 删去str末尾字符
 					str<<i
 					if l==1 

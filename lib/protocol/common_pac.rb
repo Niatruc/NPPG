@@ -20,6 +20,15 @@ module CommonPac
 		self.body
 	end
 
+	def pac_info
+		pac_info = {}
+		self.instance_variables.each do |iv|
+			iv = iv.to_s.delete('@')
+			eval "pac_info[:#{iv}] = self.#{iv}.field_info if self.#{iv}.respond_to?(:dup_head)" if iv =~ /.+h$/
+		end
+		pac_info
+	end
+
 	# def self.included(c)
 	# 	def c.singleton_method_added(f)
 			

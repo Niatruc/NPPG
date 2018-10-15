@@ -3,6 +3,7 @@ class EtherH
 	# 各字段直接用ascii串表示
 	include Common
 	attr_accessor :src_mac, :dst_mac, :protocol
+	self.class_variable_set("@@field_name_sym_set", [:src_mac, :dst_mac, :protocol])
 
 	def self.from_string(str)
 		etherh = self.new(14*8)
@@ -30,4 +31,5 @@ class EtherH
 		end
 		h
 	end
+
 end

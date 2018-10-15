@@ -22,7 +22,7 @@ EM::run{
 					i=0
 					puts color_yellow("当前所选网络接口: "), $pcap_info
 					puts color_yellow("当前可用网络接口: ")
-					P.dump_devices.each_with_index{|ni, i| print i, ". ", ni, "\n" }
+					P.dump_devices.each_with_index {|ni, i| print i, ". ", ni, "\n" }
 					puts color_yellow("选择要使用的网络接口: ")
 					ni = readline.to_i
 

@@ -45,6 +45,7 @@ end
 
 
 CONFIG = {
+	color_switch_on: false,
 	pcap_count: 1000,
 	pcap_timeout: 10,
 	iso: true,

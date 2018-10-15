@@ -5,7 +5,14 @@ class NTPH
 
 	define_field_func({
 		li: 2, vn: 3, mode: 3, stratum: 8, poll: 8, precision: 8,
-		
+		root_delay: 32,
+		root_dispersion: 32,
+		reference_identifier: 32,
+		reference_timestamp: 32,
+		originate_timestamp: 32,
+		receive_timestamp: 32,
+		transmit_timestamp: 32,
+		authenticator: 32,
 	})
 end
 

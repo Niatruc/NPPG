@@ -106,7 +106,7 @@ class TCPP < IPv4P
 		np
 	end
 
-	# pac为从连接的对端发来的包(如，syn握手包)，last_sended_pac为本地上次发出的syn包，在这里拿来改造用
+	# recv_pac为从连接的对端发来的包(如，syn握手包)，last_sended_pac为本地上次发出的syn包，在这里拿来改造用
 	def self.ack_for_pac(recv_pac, last_sended_pac, cf="00010000")
 		pac_from_pac(last_sended_pac, :new) do |new_pac|
 			new_pac.instance_eval do
@@ -116,6 +116,12 @@ class TCPP < IPv4P
 				yield(new_pac) if block_given?
 			end
 		end
+	end
+
+	def pac_info_by_layer
+		pac_info = super
+		pac_info[:tcph] = tcph.field_info
+		pac_info
 	end
 
 	class << self

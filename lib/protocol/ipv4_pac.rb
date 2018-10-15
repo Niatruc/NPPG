@@ -21,6 +21,12 @@ class IPv4P < EtherP
 		 	@ipv4h.set_check_sum()
 	end
 
+	def pac_info_by_layer
+		pac_info = super
+		pac_info[:ipv4h] = ipv4h.field_info
+		pac_info
+	end
+
 	class << self
 		def build_pac_from_str(str)
 			pac = build_ether_pac(str) #ruby中的类不能用super调用父类的类方法，故只能在父类EtherP中对build_pac_from_str命名别名为build_ether_pac

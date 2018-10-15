@@ -15,6 +15,10 @@ class EtherP < FFI::PCap::Packet
 		@app_data = ""
 	end
 
+	def pac_info_by_layer
+		{etherh: etherh.field_info}
+	end
+
 	# 根据所给报文字符串建立Packet实例
 	class << self
 		def build_pac_from_str(str)

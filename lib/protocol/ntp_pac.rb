@@ -8,5 +8,8 @@ class NTPP < UDPP
 		@ntph = NTPH.new
 			@ntph.li = '11'
 			@ntph.vn = 3
+			@ntph.mode = 3
+			@ntph.vn = 3
+			@ntph.vn = 3
 	end
 end

@@ -17,10 +17,15 @@ module Common
 			h.bit_str = data.unpack("B*")[0]
 			h
 		end
+
+		# 这个实例变量用来存储协议所有字段名
+		c.class_variable_set("@@field_name_sym_set", [])
 		
 		# 定义报头各字段的getter和setter（hash是键值对：协议字段名-协议字段长度）
 		def c.define_field_func(hash, &block)
 			i = 0
+			field_name_sym_set = self.class_variable_get("@@field_name_sym_set")
+
 			hash.each do |f,len| #len指字段的二进制位数
 		 		j = i
 			 	define_method(f) do
@@ -41,7 +46,11 @@ module Common
 			 	i += len
 
 			 	yield(f,len) if block_given?
+
+			 	field_name_sym_set << f.to_sym
 			end
+
+			field_name_sym_set.freeze
 		end
 
 		# 给某个字段添加以十进制取值的方法(即返回该字段的十进制值)
@@ -50,6 +59,26 @@ module Common
 				send(f).to_i(2)
 			end
 		end
+	end
+
+	# 将所有字段值以hash的形式返回
+	def field_info(field_format_hash = {})
+		field_info = {}
+		special_field_name_arr = field_format_hash.keys
+
+		self.class.class_variable_get("@@field_name_sym_set").each do |field_name|
+			if special_field_name_arr.include?(field_name)
+				field_format = field_format_hash[field_name]
+				if field_format.class <= Proc
+					field_info[field_name] = field_format.call()
+				else
+					field_info[field_name] = field_format
+				end
+			else
+				field_info[field_name] = send(field_name)
+			end
+		end
+		field_info
 	end
 
 	# 将01串@bit_str按每8位分割成数组，然后将数组打包成ascii串
@@ -62,7 +91,7 @@ module Common
 		arr.pack("C*")#.force_encoding("UTF-8")
 	end
 
-	#对01串str进行设置，将index处开始的length个字符替换为str
+	# 对01串str进行设置，将index处开始的length个字符替换为str
 	def set_field(index, length, str)
 		return false if length!=str.length
 		@bit_str.sub!(/(?<=^.{#{index}}).{#{length}}/, str)
