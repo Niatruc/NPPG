@@ -5,6 +5,7 @@ require_relative 'common_pac'
 class EtherP < FFI::PCap::Packet
 	include CommonPac
 	attr_accessor :etherh, :app_data
+	
 	def initialize
 		packet = super(nil,"")
 		@etherh = EtherH.new

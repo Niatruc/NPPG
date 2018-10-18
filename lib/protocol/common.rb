@@ -37,6 +37,12 @@ module Common
 			 		elsif str.class <= Array
 			 			str = (str.reduce(0){|s,i| s=(s+i)*256}/256).to_s(2)	#按字节将数组str合并成一个整数
 			 		end
+
+			 		# 若含有非01的字符，判定为非法字符串
+			 		if str =~ /[^01]/
+			 			raise "Invalid value!"
+			 		end
+
 			 		if str.length > len
 			 			puts color_red(" 数值过大或过长")
 			 		else
@@ -148,7 +154,3 @@ module Common
 		h
 	end
 end
-
-"\x46\xff\x00\x00\x00\x00\x00\x00\xff\x06\x00\x00\xc0\xa8\x01\x6b\xc0\xa8\x01\x66\x00\x00\x00\x00"
-# 0000   46 ff 00 00 00 00 00 00 ff 06 ff 3c c0 a8 01 6b
-# 0010   c0 a8 01 66 00 00 00 00

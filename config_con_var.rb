@@ -1,15 +1,4 @@
-require 'ffi-pcap'
-P = FFI::PCap
-L = P::Live
-Packet = P::Packet
-ThisDir = __FILE__.sub(/\/[^\/]*$/, '')	#当前所在文件夹之绝对路径，最后不带斜杠
 
-$pcap_info = P.dump_devices[0]
-$pcap = L.new(:dev => P.dump_devices[3][0])
-def $pcap.send_packet(pac)
-	pac.renew if pac.class <= FFI::PCap::Packet
-	super(pac)
-end
 ############################################################################################################################################
 
 # $pcap_info = P.dump_devices[0]
@@ -45,6 +34,8 @@ end
 
 
 CONFIG = {
+	load_all: true,
+	display_sended_pac: true,
 	color_switch_on: false,
 	pcap_count: 1000,
 	pcap_timeout: 10,

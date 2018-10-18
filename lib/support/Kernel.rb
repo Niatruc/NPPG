@@ -21,21 +21,22 @@ module Kernel
 		end
 	end
 
-	def load_lib(lib_dir, *suffix)
-		Dir.open(lib_dir){|d|
-			s = suffix.join('.')
-			d.each{|f|
-				if !['.','..'].include?(f)
-					f = d.path+'/'+f
-					if File.directory?(f)
+	def load_lib(lib_path, *suffix)
+		s = suffix.join('.')
+		if File.directory?(lib_path)
+			Dir.open(lib_path) do |d|
+				d.each do |f|
+					if !['.','..'].include?(f)
+						f = d.path + '/' + f
 						load_lib(f, suffix) 
-					else
-						puts "Loading file: #{f} (OK)"
-						load f if f =~ /.*\.#{s}(\..+)?/
 					end
 				end
-			}
-		}
+			end
+		else
+			print "Loading file: #{lib_path} "
+			load lib_path if lib_path =~ /.*\.#{s}(\..+)?/
+			puts "(OK)"
+		end
 	end
 
 	def read_num; readline.to_i end
@@ -101,6 +102,7 @@ module Kernel
 				case input
 				when "quit"
 					break
+
 				when "show-options"
 					print "name			val			desc\n"
 					options[:vars].each do |var, arr|
@@ -110,13 +112,15 @@ module Kernel
 						end
 						print "#{var}			#{val}			#{arr[1]}\n"
 					end
+
 				when "show-configs"
 					puts "name			val"
 					config.each do |k, v|
 						puts "#{k}			#{v}"
 					end
+
 				when /^(\w+)\s+(\w+)\s+(.+)/
-					p md = /^(\w+)\s+(\w+)\s+(.+)/.match(input)
+					md = /^(\w+)\s+(\w+)\s+(.+)/.match(input)
 
 					if nil == options[:vars][md[2].to_sym]
 						options[:vars][md[2].to_sym] = []
@@ -124,16 +128,18 @@ module Kernel
 
 					case md[1]
 					when "set"
-						options[:vars][md[2].to_sym][0] = vars[md[2].to_sym] = eval(md[3])
+						options[:vars][md[2].upcase.to_sym][0] = vars[md[2].upcase.to_sym] = eval(md[3])
 					when "desc"
-						options[:vars][md[2].to_sym][1] = desc[md[2].to_sym] = md[3]
+						options[:vars][md[2].upcase.to_sym][1] = desc[md[2].upcase.to_sym] = md[3]
 					when "config"
 						config[md[2].to_sym] = eval(md[3])
 					end
+
 				when "run"
 					run {
 						blk.call(vars)
 					}
+
 				end
 			rescue Exception => e
 				p e
@@ -159,6 +165,9 @@ module Kernel
 		num += f==:azure ? 5:1
 	end
 
+#########################################################################################
+# 点分十进制字符串转其他类型
+
 	# 点分十进制的正则对应的字符串
 	def dot_dec_regexp_str(num=4)
 		within255="(?:25[0-5]|2[0-4]\\d|1?\\d{1,2})"
@@ -170,6 +179,38 @@ module Kernel
 	def dot_dec_to_arr(str)
 		str.split(".").reduce([]){|arr,i| arr<<i.to_i}
 	end
+
+	# 将形如"192.168.1.1 - 192.168.1.255"的由两个隔开的点分十进制IP地址
+	# 或形如"192,168.1.0/24"的CIDR网络地址
+	# 转成整数范围，以表示IP地址范围;
+	# 也可将单个点分十进制IP地址字符串转成整数返回
+	def ip_str_to_range(str)
+		arr = []
+		str.scan(/#{ddrs}(?!\/)/) do |m|
+			arr<<dot_dec_to_arr(m[0])
+		end
+
+		if !arr[0].nil? and !arr[1].nil?
+			return arr_to_int(arr[0])..arr_to_int(arr[1])
+		elsif !arr[0].nil?
+			return arr_to_int(arr[0])
+		else
+			addr, mask = str.scan(/#{ddrs}\/(\d+)/)[0]
+			if !addr.nil?
+		 		addr = dot_dec_to_arr(addr)
+		 		addr_str = arr_to_bit_str(addr)
+		 		mask = mask.to_i
+
+		 		common = addr_str[0, mask]
+		 		from = (common + '0'*(32-mask)).to_i(2)
+		 		to = (common + '1'*(32-mask)).to_i(2)
+		 		return from..to
+		 	end
+		end
+	end
+
+#########################################################################################
+# 数组转其他类型
 
 	# 数组转点分十进制
 	def arr_to_dot_dec(arr)
@@ -183,15 +224,29 @@ module Kernel
 
 	# 将整个整数数组每个元素看成一个256进制数的一位的十进制表示，然后将这个256进制数转换为一个十进制整数
 	def arr_to_int(arr)
-		arr.reduce(0){|s,i| s=(s+i)*256}/256
+		(arr.reduce(0) { |s,i| s = (s+i) * 256 }) /256
 	end
+
+#########################################################################################
+# 01字符串转其他类型
 
 	# 将位串按8位分，得到整数数组
 	def bit_str_to_int_arr(bit_str)
 		bs = bit_str.dup
 		arr = []
-		arr<<bs.slice!(0,8).to_i(2) while !bs.empty?
+		arr << bs.slice!(0,8).to_i(2) while !bs.empty?
 		arr
+	end
+
+	# 01串转为点分十进制字符串
+	def bit_str_to_dot_dec(bit_str)
+		bit_str_to_int_arr(bit_str).join(".")
+	end
+
+	# 将位串转为MAC地址字符串
+	def bit_str_to_mac_semi_hex_str(bit_str)
+		str = bit_str_to_int_arr(bit_str).reduce("") { |semi_hex_str, num| "#{semi_hex_str}:#{num.to_s(16)}"}
+		str[1, str.size]
 	end
 
 	# 将位串转为ASCII字符串
@@ -199,50 +254,19 @@ module Kernel
 		bit_str_to_int_arr(bit_str).pack("C*")
 	end
 
+#########################################################################################
+# 字符串数据（也即pcap捕获的原生数据格式）转其他类型
+
 	# 将ASCII字符串转为位串
 	def str_to_bit_str(str)
 		str.unpack("B*")[0]
 	end
 
-	def ip_str_to_range(str)
-		arr = []
-		str.scan(/#{ddrs}(?!\/)/) do |m|
-			arr<<dot_dec_to_arr(m[0])
-		end
-		if !arr[0].nil? and !arr[1].nil?
-			return arr_to_int(arr[0])..arr_to_int(arr[1])
-		elsif !arr[0].nil?
-			return arr_to_int(arr[0])
-		else
-			addr, mask = str.scan(/#{ddrs}\/(\d+)/)[0]
-			if !addr.nil?
-	 		addr = dot_dec_to_arr(addr)
-	 		addr_str = arr_to_bit_str(addr)
-	 		mask = mask.to_i
-
-	 		common = addr_str[0, mask]
-	 		from = (common+'0'*(32-mask)).to_i(2)
-	 		to = (common+'1'*(32-mask)).to_i(2)
-	 		return from..to
-	 	end
-		end
-	end
-
-	# 将字符串形式的mac地址转为分号分隔的十六进制串
-	def mac_to_semi_hex(mac)
+	# 将ASCII字符串形式的mac地址转为分号分隔的十六进制串
+	def str_to_mac_semi_hex_str(mac)
 		mac.unpack("C*").reduce(''){|s,v| s+=v.to_s(16)+':'}.chop
 	end
 
-	#  def check_sum(str)
-	# 	checksum = "0000000000000000"
-	# 	sum = 0
-	# 	str = str.dup
-	# 	while !str.empty?
-	# 		sum = sum.bsum(str.slice!(0,16).to_i(2), 16)
-	# 	end
-	# 	# np = ~sum<0 ? '1' : '0'
-	# 	# sum = [~sum].pack("C*")[0].unpack("B*")[0]
-	# 	sum = sum.complement_str
-	# 	checksum = sum
-	# end
+#########################################################################################
+
 end

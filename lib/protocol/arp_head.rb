@@ -25,4 +25,11 @@ class ARPH
 	def get_addr_arr(prefix)
 		super(prefix, "_ip")
 	end
+
+	def field_info
+		super({
+			sender_ip: bit_str_to_dot_dec(sender_ip),
+			receiver_ip: bit_str_to_dot_dec(receiver_ip),
+		})
+	end
 end
