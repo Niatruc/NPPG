@@ -100,7 +100,7 @@ module Kernel
 			input = readline.chop
 			begin
 				case input
-				when "quit"
+				when "quit", "q"
 					break
 
 				when "show-options"

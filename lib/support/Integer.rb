@@ -2,37 +2,38 @@ class Integer
 	# bit_num:二进制加法中
 	def bsum(b, bit_num)
 		a = self
-		c = (a+b).to_s(2)
-		carry = c.length>bit_num ? (begin c.slice!(0);1 end):0 #循环加：若高位溢出，将进位加到最低位
-		c.to_i(2)+carry
+		c = (a + b).to_s(2)
+		carry = c.length > bit_num ? (begin c.slice!(0);1 end):0 #循环加：若高位溢出，将进位加到最低位
+		c.to_i(2) + carry
 	end
 
 	# 将01串按位取反
-	def complement_str(bit_num=16)
+	def complement_str(bit_num = 16)
 		str = self.to_s(2)
 		str.length.times do |i|
-			str[i] = str[i]=='1'? '0' : '1'
+			str[i] = str[i] == '1' ? '0' : '1'
 		end
 
 		padding = ""
-		(bit_num-str.length).times do
-			padding<<'1'
+		(bit_num - str.length).times do
+			padding << '1'
 		end
-		padding+str
+		padding + str
 	end
 
+	# 将整数按字节转成ascii字符串
 	def to_asc_str
-		arr=[]
-		str=""
-		if self==0
-			str<<0
+		arr = []
+		str = ""
+		if self == 0
+			str << 0
 		else
 			v = self.abs
-			while v>0
-				arr.unshift(v%256)
+			while v > 0
+				arr.unshift(v % 256)
 				v /= 256
 			end
-			arr.reduce(str){|s,v| s<<v.chr}
+			arr.reduce(str) { |s, v| s << v.chr }
 		end
 	end
 end

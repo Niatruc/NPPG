@@ -35,7 +35,7 @@
 
 CONFIG = {
 	load_all: true,
-	display_sended_pac: true,
+	display_sended_pac: false,
 	color_switch_on: false,
 	pcap_count: 1000,
 	pcap_timeout: 10,

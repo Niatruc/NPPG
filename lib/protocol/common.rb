@@ -1,8 +1,9 @@
 require_relative '../support/integer'
 require_relative '../support/kernel'
+
 module Common
 	attr_accessor :bit_str
-	def initialize(bit_num=0)
+	def initialize(bit_num = 0)
 		# @bit_str = ""
 		@bit_str = '0'*bit_num
 	end
@@ -11,27 +12,33 @@ module Common
 	def self.included(c)
 		# 包含Common模块会得到这些方法（作为c的类方法）
 
-		# 用于使用（由Packet#body方法获取的）字符串构造各协议头对应的实例
+		# 使用（由Packet#body方法获取的）字符串构造各协议头对应的实例
 		def c.from_string(data)
 			h = self.new
-			h.bit_str = data.unpack("B*")[0]
+			h.bit_str = data.unpack("B*")[0] # 将ascii码字符串转为‘01’串
 			h
 		end
 
-		# 这个实例变量用来存储协议所有字段名
+		# 这个实例变量用来存储协议头部的所有字段名
 		c.class_variable_set("@@field_name_sym_set", [])
 		
 		# 定义报头各字段的getter和setter（hash是键值对：协议字段名-协议字段长度）
-		def c.define_field_func(hash, &block)
+		def c.define_field_func(field_info_hash, &block)
 			i = 0
 			field_name_sym_set = self.class_variable_get("@@field_name_sym_set")
 
-			hash.each do |f,len| #len指字段的二进制位数
-		 		j = i
+			field_info_hash.each do |f, len| #len指字段的二进制位数
+		 		j = i # 在field_info_hash.each的每一次循环体中，j都是一个新的局部变量，可确保不同字段的下面定义的getter/setter用到的j相互独立
+
+		 		# 定义协议字段的getter。按字段的位置和长度，从01串中取出该字段的值的01串
 			 	define_method(f) do
 			 		@bit_str.slice(j,len)
 			 	end
-			 	define_method( f.to_s+"=" ) do|str|
+
+			 	# 定义协议字段的setter
+			 	define_method(f.to_s + "=") do |str|
+
+			 		# 先确保str为01串（若不是则先转换）
 			 		if str.class <= Integer 	#若参数是整数而非字符串
 			 			str = str.to_s(2)
 			 		elsif str.class <= Array
@@ -46,9 +53,11 @@ module Common
 			 		if str.length > len
 			 			puts color_red(" 数值过大或过长")
 			 		else
-			 			set_field(j, len, '0'*(len-str.length)+str) #j表示此字段在@bit_str中的起始位置，len表示字段长度（有多少个二进制位）	
+			 			# j表示此字段在@bit_str中的起始位置，len表示字段长度（有多少个二进制位）。第三个参数是字段的值（01串），长度不够时用0补齐
+			 			set_field(j, len, '0'*(len-str.length)+str)
 			 		end
 			 	end
+
 			 	i += len
 
 			 	yield(f,len) if block_given?
@@ -67,7 +76,7 @@ module Common
 		end
 	end
 
-	# 将所有字段值以hash的形式返回
+	# 将所有字段值以hash的形式返回(field_format_hash为包含特殊处理的字段的信息)
 	def field_info(field_format_hash = {})
 		field_info = {}
 		special_field_name_arr = field_format_hash.keys

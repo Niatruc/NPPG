@@ -14,17 +14,16 @@ EM::run{
 
 			begin
 				case opt
-				when 'quit'
+				when 'quit', 'q'
 					break
 
-				when 'help'
+				when 'help', 'h'
 					list.each { |i| print color_azure(i[0]),": ",color_green(i[1][1]),"\n" }
 
-				when 'rb','ruby'
+				when 'ruby','rb'
 					load "#{ThisDir}/bin/repl.rb"
 
 				when 'ni'
-					i=0
 					puts color_yellow("当前所选网络接口: "), $pcap_info
 					puts color_yellow("当前可用网络接口: ")
 					P.dump_devices.each_with_index {|ni, i| print i, ". ", ni, "\n" }

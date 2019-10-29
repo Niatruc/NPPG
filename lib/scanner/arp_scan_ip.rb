@@ -9,6 +9,7 @@ class ARPP
 		yield(a) if block_given?
 
 		ip = options[:IP] || ""
+		replay_time = options[:REPLAY_TIME] || 1
 		redo_time = options[:REDO_TIME] || 1
 		interval = options[:INTERVAL] || 1
 		timeout = options[:TIMEOUT] || 5
