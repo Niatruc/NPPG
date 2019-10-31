@@ -6,7 +6,12 @@ module ReplReadline
 	# @candidates = []
 	@pac_classes = Object.constants.reject { |i| 
 		j = eval("#{i.to_s}")
-		!(j.class == Class and j.superclass <= FFI::PCap::Packet)
+		begin
+			!(j.class == Class and j.superclass <= FFI::PCap::Packet)
+		rescue
+			# 解决linux中的报错问题
+			true
+		end
 	}.collect(&:to_s)
 
 	@completion_proc = ->(input) {

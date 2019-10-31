@@ -1,7 +1,8 @@
 require 'readline'
 
 module ExtReadline
-	include Readline
+	# CRuby跟JRuby不兼容，没法extend Readline后使用completion_proc=
+	# include Readline
 
 	attr_accessor :candidates
 
@@ -12,6 +13,14 @@ module ExtReadline
 
 	def read(prompt, add_hist)
 		readline(prompt, add_hist)
+	end
+
+	def completion_proc=(proc)
+		Readline.completion_proc = proc
+	end
+
+	def completion_append_character=(c)
+		Readline.completion_append_character = c
 	end
 
 	# self.completer_word_break_characters = " "
