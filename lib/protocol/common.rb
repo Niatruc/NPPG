@@ -1,5 +1,5 @@
-require_relative '../support/integer'
-require_relative '../support/kernel'
+require_relative '../support/Integer'
+require_relative '../support/Kernel'
 
 module Common
 	attr_accessor :bit_str

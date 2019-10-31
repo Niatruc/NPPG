@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require_relative '../../lib/support/kernel.rb'
+require_relative '../../lib/support/Kernel.rb'
 
 class KernelTest < MiniTest::Unit::TestCase
 	def setup

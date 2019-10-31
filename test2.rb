@@ -1,5 +1,5 @@
 $: << "E:/Ruby22/test/pcap/IP_deceive"
-load 'lib/support/kernel.rb'
+load 'lib/support/Kernel.rb'
 
 require 'ffi-pcap'
 require 'eventmachine'

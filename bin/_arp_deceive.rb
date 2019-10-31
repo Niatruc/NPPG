@@ -1,5 +1,5 @@
 require_relative '../config_con_var.rb'
-require_relative '../lib/support/kernel.rb'
+require_relative '../lib/support/Kernel.rb'
 
 puts color_azure("输入攻击次数: ")
 redo_time = read_num

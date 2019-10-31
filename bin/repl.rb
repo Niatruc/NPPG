@@ -1,4 +1,4 @@
-require_relative '../lib/support/kernel.rb'
+require_relative '../lib/support/Kernel.rb'
 require_relative '../lib/readline/repl_readline.rb'
 
 exp=nil
