@@ -3,7 +3,7 @@ require 'readline'
 require_relative 'lib/readline/main_readline.rb'
 
 list = $list.sort_by{|k, v| v[1]}	#转成数组
-MainReadline.candidates = $list.keys
+MainReadline.candidates = $list.keys.collect(&:to_s)
 
 # 初始化$pcap变量，用于发送和接收网络数据
 $reset_pcap.call(0)

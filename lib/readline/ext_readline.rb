@@ -12,7 +12,7 @@ module ExtReadline
 	end
 
 	def read(prompt, add_hist)
-		readline(prompt, add_hist)
+		Readline.readline(prompt, add_hist)
 	end
 
 	def completion_proc=(proc)

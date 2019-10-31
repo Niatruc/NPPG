@@ -21,7 +21,7 @@ module ReplReadline
 
 		# 作用域中的常量、变量
 		when /^[a-zA-Z][^.]*$/, ""
-			candidates = @candidates + TOPLEVEL_BINDING.send(:local_variables) + @pac_classes
+			candidates = @candidates + TOPLEVEL_BINDING.send(:local_variables).collect(&:to_s) + @pac_classes
 			candidates.grep(r)
 
 		# 全局变量（readline不识别$，暂时用不了）
