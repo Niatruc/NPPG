@@ -30,8 +30,8 @@ class ARPP
 			pcap.dispatch(timeout: timeout) do|t, pkt|
 				arpp = ARPP.build_arp_pac(pkt.body)
 				next if arpp.arph.opcode_decimal != 2 #筛选出arp应答报文
-				mac = arpp.arph.get_mac_str(:sender)
-				ip = arr_to_dot_dec(arpp.arph.get_addr_arr(:sender))
+				mac = bit_str_to_mac_semi_hex_str(arpp.arph.sender_mac)
+				ip = bit_str_to_dot_dec(arpp.arph.sender_ip)
 				puts "#{ip} 		#{mac}"
 				# break
 			end

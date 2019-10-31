@@ -1,15 +1,16 @@
 require_relative 'config.rb'
+require 'readline'
+require_relative 'lib/readline/main_readline.rb'
 
 list = $list.sort_by{|k, v| v[1]}	#转成数组
+MainReadline.candidates = $list.keys
 
-# Dir.open("bin"){|d| d.each{|f| list<<f.sub(/\.rb/,'') if f.include?(".rb")}}
-
+# 初始化$pcap变量，用于发送和接收网络数据
 $reset_pcap.call(0)
 
 EM::run{
 	ignore_exception{
-		m
-		while opt=readline.delete("\r\n")
+		while opt = MainReadline.read(">> ", true)
 			args = nil
 
 			begin
@@ -22,6 +23,7 @@ EM::run{
 
 				when 'ruby','rb'
 					load "#{ThisDir}/bin/repl.rb"
+					MainReadline.reset_readline_completion_proc
 
 				when 'ni'
 					puts color_yellow("当前所选网络接口: "), $pcap_info
@@ -35,14 +37,19 @@ EM::run{
 				else
 					# 如果是直接输入bin目录下的文件（路径）名，则直接执行对应的ruby文件
 					if !$list[opt.to_sym].nil? and File.exist?("#{ThisDir}/bin/#{$list[opt.to_sym][0]}.rb")
-						load "#{ThisDir}/bin/#{$list[opt.to_sym][0]}.rb" 
+						load "#{ThisDir}/bin/#{$list[opt.to_sym][0]}.rb"
+						MainReadline.reset_readline_completion_proc
+
+					# rl命令，重新加载指定目录下的rb文件
 					elsif /^(rl|reloadfiles)(?<args>(?:\s+).*)*/ =~ opt
 						args && args.split(/\s+/).each do |arg|
 							load_lib("#{ThisDir}/#{arg}") if !arg.empty?
-						end || load_lib("#{ThisDir}/lib")
+						end ||
+						CONFIG[:reload_files_paths].each do |path|
+							load_lib("#{ThisDir}/#{path}")
+						end
 					end
 				end
-				m
 			rescue Exception => e
 				puts color_red("出错！")
 				puts e.message  

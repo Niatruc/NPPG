@@ -19,8 +19,8 @@ class IPv4H
 
 	def field_info
 		super({
-			src_addr: get_addr_arr(:src),
-			dst_addr: get_addr_arr(:dst),
+			src_addr: bit_str_to_int_arr(self.src_addr),
+			dst_addr: bit_str_to_int_arr(self.dst_addr),
 		})
 	end
 end

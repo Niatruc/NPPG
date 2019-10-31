@@ -83,7 +83,10 @@ module Kernel
 	def m(context=nil); print color_white_b(color_black("#{context}")),'>> ' end
 
 	def new_process(options, &blk)
-		config = get_const :CONFIG
+		config = get_const(:CONFIG)
+		new_proc_readline = get_const(:NewProcessReadline)
+		new_proc_readline.candidates = %w{quit show-options show-configs set desc config run}
+		new_proc_readline.reset_readline_completion_proc
 
 		vars = {} 
 		options[:vars].each do |k, v|
@@ -95,9 +98,7 @@ module Kernel
 			desc[k] = v[1]
 		end
 
-		while true
-			m options[:title]
-			input = readline.chop
+		while input = new_proc_readline.read(options[:title] + ">> ", true)
 			begin
 				case input
 				when "quit", "q"
@@ -181,7 +182,7 @@ module Kernel
 	end
 
 	# 将形如"192.168.1.1 - 192.168.1.255"的由两个隔开的点分十进制IP地址
-	# 或形如"192,168.1.0/24"的CIDR网络地址
+	# 或形如"192.168.1.0/24"的CIDR网络地址
 	# 转成整数范围，以表示IP地址范围;
 	# 也可将单个点分十进制IP地址字符串转成整数返回
 	def ip_str_to_range(str)
@@ -210,6 +211,14 @@ module Kernel
 	end
 
 #########################################################################################
+# MAC地址字符串转其他类型
+	
+	# MAC地址转字符串
+	def mac_to_str(mac)
+		mac.split(/[-:]/).collect { |i| i.to_i(16) }.pack("C*")
+	end
+
+#########################################################################################
 # 数组转其他类型
 
 	# 数组转点分十进制
@@ -224,7 +233,7 @@ module Kernel
 
 	# 将整个整数数组每个元素看成一个256进制数的一位的十进制表示，然后将这个256进制数转换为一个十进制整数
 	def arr_to_int(arr)
-		(arr.reduce(0) { |s,i| s = (s+i) * 256 }) /256
+		(arr.reduce(0) { |s,i| s = (s + i) * 256 }) / 256
 	end
 
 #########################################################################################
@@ -255,7 +264,7 @@ module Kernel
 	end
 
 #########################################################################################
-# 字符串数据（也即pcap捕获的原生数据格式）转其他类型
+# ASCII字符串数据（也即pcap捕获的原生数据格式）转其他类型
 
 	# 将ASCII字符串转为位串
 	def str_to_bit_str(str)
@@ -264,7 +273,10 @@ module Kernel
 
 	# 将ASCII字符串形式的mac地址转为分号分隔的十六进制串
 	def str_to_mac_semi_hex_str(mac)
-		mac.unpack("C*").reduce(''){|s,v| s+=v.to_s(16)+':'}.chop
+		mac.unpack('C*').collect { |i| 
+			i = i.to_s(16).upcase
+			i.length < 2 ? ('0'+i) : i
+		}.join(':')
 	end
 
 #########################################################################################
