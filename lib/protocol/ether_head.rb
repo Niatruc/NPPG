@@ -34,8 +34,8 @@ class EtherH
 
 	def field_info
 		super({
-			src_mac: str_to_mac_semi_hex_str(self.src_mac),
-			dst_mac: str_to_mac_semi_hex_str(self.dst_mac),
+			src_mac: str_to_mac(self.src_mac),
+			dst_mac: str_to_mac(self.dst_mac),
 		})
 	end
 end

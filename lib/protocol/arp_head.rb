@@ -30,8 +30,8 @@ class ARPH
 		super({
 			sender_ip: bit_str_to_dot_dec(sender_ip),
 			receiver_ip: bit_str_to_dot_dec(receiver_ip),
-			sender_mac: bit_str_to_mac_semi_hex_str(sender_mac),
-			receiver_mac: bit_str_to_mac_semi_hex_str(receiver_mac),
+			sender_mac: bit_str_to_mac(sender_mac),
+			receiver_mac: bit_str_to_mac(receiver_mac),
 		})
 	end
 end

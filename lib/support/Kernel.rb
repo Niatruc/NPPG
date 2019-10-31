@@ -253,7 +253,7 @@ module Kernel
 	end
 
 	# 将位串转为MAC地址字符串
-	def bit_str_to_mac_semi_hex_str(bit_str)
+	def bit_str_to_mac(bit_str)
 		str = bit_str_to_int_arr(bit_str).reduce("") { |semi_hex_str, num| "#{semi_hex_str}:#{num.to_s(16)}"}
 		str[1, str.size]
 	end
@@ -272,7 +272,7 @@ module Kernel
 	end
 
 	# 将ASCII字符串形式的mac地址转为分号分隔的十六进制串
-	def str_to_mac_semi_hex_str(mac)
+	def str_to_mac(mac)
 		mac.unpack('C*').collect { |i| 
 			i = i.to_s(16).upcase
 			i.length < 2 ? ('0'+i) : i
