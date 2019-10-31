@@ -1,5 +1,5 @@
 require_relative '../protocol/tcp_pac.rb'
-require_relative '../support/Kernel.rb'
+require_relative '../support/kernel.rb'
 
 class TCPP
 	# TCP端口扫描

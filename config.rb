@@ -1,5 +1,5 @@
 require_relative 'config_con_var.rb'
-require_relative 'lib/support/Kernel.rb'
+require_relative 'lib/support/kernel.rb'
 require_relative 'help.rb'
 require 'ffi-pcap'
 require 'eventmachine'
