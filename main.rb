@@ -5,8 +5,6 @@ require_relative 'lib/readline/main_readline.rb'
 list = $list.sort_by{|k, v| v[1]}	#转成数组
 MainReadline.candidates = $list.keys.collect(&:to_s)
 
-# 初始化$pcap变量，用于发送和接收网络数据
-$reset_pcap.call(0)
 
 EM::run{
 	ignore_exception{
@@ -38,7 +36,6 @@ EM::run{
 					# 如果是直接输入bin目录下的文件（路径）名，则直接执行对应的ruby文件
 					if !$list[opt.to_sym].nil? and File.exist?("#{ThisDir}/bin/#{$list[opt.to_sym][0]}.rb")
 						load "#{ThisDir}/bin/#{$list[opt.to_sym][0]}.rb"
-						MainReadline.reset_readline_completion_proc
 
 					# rl命令，重新加载指定目录下的rb文件
 					elsif /^(rl|reloadfiles)(?<args>(?:\s+).*)*/ =~ opt
@@ -49,6 +46,8 @@ EM::run{
 							load_lib("#{ThisDir}/#{path}")
 						end
 					end
+					
+					MainReadline.reset_readline_completion_proc
 				end
 			rescue Exception => e
 				puts color_red("出错！")

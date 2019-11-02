@@ -17,7 +17,7 @@ CONFIG = {
 	iso: false,
 
 	# 默认选择的网卡接口
-	ni_num: 1,
+	ni_num: 4,
 
 	# 网关mac地址
 	gateway_mac: "\xe4\xf3\xf5\xd4\x9a\xac",
@@ -35,16 +35,16 @@ CONFIG = {
 	ip_range: "192.168.1.0/24",
 
 	# 网关ip地址
-	gateway_ip: [192,168,1,1],
+	gateway_ip: [192, 168, 1, 1],
 
 	# 本机ip地址
-	src_ip: [192,168,1,102],
+	src_ip: [192, 168, 1, 101],
 
 	# 受害者ip地址
-	victim_ip: [192,168,1,222],
+	victim_ip: [192, 168, 1, 222],
 
 	# 目标ip地址
-	dst_ip: [192,168,1,101],
+	dst_ip: [192, 168, 1, 102],
 
 	# 本机使用的传输层端口
 	src_port: 65535,

@@ -16,6 +16,7 @@ class EtherP < FFI::PCap::Packet
 		@app_data = ""
 	end
 
+	# 以散列形式打印包中各协议字段信息
 	def pac_info_by_layer
 		{etherh: etherh.field_info}
 	end

@@ -21,6 +21,12 @@ class ARPP<EtherP
 		@etherh.protocol = "\x08\x06"
 	end
 
+	def pac_info_by_layer
+		pac_info = super
+		pac_info[:arph] = self.arph.field_info
+		pac_info
+	end
+
 	class << self
 		def build_pac_from_str(str)
 			pac = build_ether_pac(str)

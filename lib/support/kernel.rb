@@ -254,8 +254,10 @@ module Kernel
 
 	# 将位串转为MAC地址字符串
 	def bit_str_to_mac(bit_str)
-		str = bit_str_to_int_arr(bit_str).reduce("") { |semi_hex_str, num| "#{semi_hex_str}:#{num.to_s(16)}"}
-		str[1, str.size]
+		str = bit_str_to_int_arr(bit_str).collect { |i| 
+			i = i.to_s(16).upcase
+			i.length < 2 ? ('0'+i) : i
+		}.join(':')
 	end
 
 	# 将位串转为ASCII字符串

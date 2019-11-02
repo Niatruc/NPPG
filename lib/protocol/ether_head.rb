@@ -7,8 +7,8 @@ class EtherH
 
 	def self.from_string(str)
 		etherh = self.new(14*8)
-		etherh.src_mac = str.slice!(0,6)
 		etherh.dst_mac = str.slice!(0,6)
+		etherh.src_mac = str.slice!(0,6)
 		etherh.protocol = str.slice!(0,2)
 		etherh
 	end
@@ -26,7 +26,7 @@ class EtherH
 
 	def dup_head
 		h = EtherH.new
-		["src_mac", "dst_mac", "protocol"].each do |v|
+		["dst_mac", "src_mac", "protocol"].each do |v|
 			eval "h.#{v} = self.#{v}.dup"
 		end
 		h

@@ -6,7 +6,7 @@ mark = "[ruby]>> "
 ReplReadline.candidates = %w{ml ok}
 ReplReadline.reset_readline_completion_proc
 
-while (exp = ReplReadline.read(mark, true)) != "ok" #输入ok时退出repl
+while (exp = ReplReadline.read(mark, true)) != "q" #输入ok时退出repl
 	begin
 		if exp == "ml" #多行输入
 			line_num = 1

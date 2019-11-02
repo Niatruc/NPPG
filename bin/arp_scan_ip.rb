@@ -1,4 +1,4 @@
-require_relative '../config_con_var.rb'
+require_relative '../config.rb'
 load ThisDir+'/lib/scanner/arp_scan_ip.rb'
 
 new_process({

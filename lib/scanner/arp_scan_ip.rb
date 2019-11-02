@@ -24,15 +24,23 @@ class ARPP
 			pcap.send_packet(a)
 		end
 
+		# 用散列来保存已经查到的ip，避免重复
+		existed_ips = {}
+
 		puts(color_green("ip地址			mac地址"))
 		redo_time.times do
 			
 			pcap.dispatch(timeout: timeout) do|t, pkt|
 				arpp = ARPP.build_arp_pac(pkt.body)
-				next if arpp.arph.opcode_decimal != 2 #筛选出arp应答报文
+				# p arpp.pac_info_by_layer
+				next if arpp.arph.opcode_decimal != 2 # 筛选出arp应答报文
 				mac = bit_str_to_mac(arpp.arph.sender_mac)
 				ip = bit_str_to_dot_dec(arpp.arph.sender_ip)
-				puts "#{ip} 		#{mac}"
+
+				if !existed_ips[ip]
+					puts "#{ip} 		#{mac}"
+					existed_ips[ip] = true
+				end
 				# break
 			end
 

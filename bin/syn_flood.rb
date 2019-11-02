@@ -15,11 +15,11 @@ new_process({
 	TCPP.syn_flood(
 		$pcap,
 		vars.merge({
-			DST_IP: mac_to_str(vars[:DST_MAC]),
+			DST_MAC: mac_to_str(vars[:DST_MAC]),
 			SRC_IP: dot_dec_to_arr(vars[:SRC_IP]),
 			DST_IP: dot_dec_to_arr(vars[:DST_IP]),
 		})
 	)
 
-	puts "syn洪泛完成, 共发送了#{CONFIG[:port_range].max-CONFIG[:port_range].min} 个syn包"
+	puts "syn洪泛完成, 共发送了#{CONFIG[:port_range].max - CONFIG[:port_range].min} 个syn包"
 end
