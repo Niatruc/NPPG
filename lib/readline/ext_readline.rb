@@ -7,8 +7,9 @@ module ExtReadline
 	attr_accessor :candidates
 
 	# readline库的一个bug： tab时会用最近使用的completion_proc。 所以每次用新的自定义Readline模块时重新给completion_proc赋值。
-	def reset_readline_completion_proc
+	def reset_readline_completion
 		self.completion_proc = @completion_proc
+		self.completion_append_character = nil
 	end
 
 	def read(prompt, add_hist)

@@ -67,7 +67,7 @@ module Kernel
 			blk.call
 		rescue Exception => e
 			puts e
-			ignore_exception(&blk)
+			# ignore_exception(&blk)
 		end
 	end
 
@@ -85,26 +85,24 @@ module Kernel
 	def new_process(options, &blk)
 		config = get_const(:CONFIG)
 		new_proc_readline = get_const(:NewProcessReadline)
-		new_proc_readline.candidates = %w{quit show-options show-configs set desc config run}
-		new_proc_readline.reset_readline_completion_proc
+		# new_proc_readline.candidates = %w{quit show-options show-configs set desc config run}
+		new_proc_readline.reset_readline_completion
+		new_proc_readline.vars = options[:vars].keys.collect(&:to_s)
 
 		vars = {} 
-		options[:vars].each do |k, v|
-			vars[k] = v[0]
-		end
-
 		desc = {} 
 		options[:vars].each do |k, v|
+			vars[k] = v[0]
 			desc[k] = v[1]
 		end
 
 		while input = new_proc_readline.read(options[:title] + ">> ", true)
 			begin
 				case input
-				when "quit", "q"
+				when /^(quit|q)\s*$/
 					break
 
-				when "show-options"
+				when /^(show\-options)\s*$/
 					print "name			val			desc\n"
 					options[:vars].each do |var, arr|
 						val = arr[0]
@@ -114,7 +112,7 @@ module Kernel
 						print "#{var}			#{val}			#{arr[1]}\n"
 					end
 
-				when "show-configs"
+				when /^(show\-configs)\s*$/
 					puts "name			val"
 					config.each do |k, v|
 						puts "#{k}			#{v}"

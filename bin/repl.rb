@@ -3,8 +3,8 @@ require_relative '../lib/readline/repl_readline.rb'
 
 exp=nil
 mark = "[ruby]>> "
-ReplReadline.candidates = %w{ml ok}
-ReplReadline.reset_readline_completion_proc
+# ReplReadline.candidates = %w{ml ok}
+ReplReadline.reset_readline_completion
 
 while (exp = ReplReadline.read(mark, true)) != "q" #输入ok时退出repl
 	begin

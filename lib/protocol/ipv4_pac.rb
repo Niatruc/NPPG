@@ -39,7 +39,6 @@ class IPv4P < EtherP
 		def pac_from_pac(pac, type=nil)
 			pac = type==:new ? pac.dup_pac : pac
 			yield(pac) if block_given?
-			p "ipv4"
 			pac.ipv4h.checksum = "0000000000000000"
 			pac.ipv4h.set_check_sum
 			pac.renew

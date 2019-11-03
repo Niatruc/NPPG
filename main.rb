@@ -21,7 +21,7 @@ EM::run{
 
 				when 'ruby','rb'
 					load "#{ThisDir}/bin/repl.rb"
-					MainReadline.reset_readline_completion_proc
+					MainReadline.reset_readline_completion
 
 				when 'ni'
 					puts color_yellow("当前所选网络接口: "), $pcap_info
@@ -46,8 +46,8 @@ EM::run{
 							load_lib("#{ThisDir}/#{path}")
 						end
 					end
-					
-					MainReadline.reset_readline_completion_proc
+
+					MainReadline.reset_readline_completion
 				end
 			rescue Exception => e
 				puts color_red("出错！")

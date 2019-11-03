@@ -3,7 +3,7 @@ require_relative 'ext_readline'
 module ReplReadline
 	extend ExtReadline
 	
-	# @candidates = []
+	@candidates = %w{ml ok}
 	@pac_classes = Object.constants.reject { |i| 
 		j = eval("#{i.to_s}")
 		begin
