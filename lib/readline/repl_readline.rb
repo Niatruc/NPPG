@@ -15,7 +15,7 @@ module ReplReadline
 	}.collect(&:to_s)
 
 	@completion_proc = ->(input) {
-		r = /#{Regexp.escape(input)}/
+		r = /^#{Regexp.escape(input)}/
 
 		case input
 

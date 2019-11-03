@@ -1,4 +1,5 @@
 class Integer
+	
 	# bit_num:二进制加法中
 	def bsum(b, bit_num)
 		a = self

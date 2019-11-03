@@ -8,7 +8,7 @@ module NewProcessReadline
 
 	@completion_proc = ->(input) {
 		current_line = Readline.line_buffer
-		r = /#{Regexp.escape(input)}/
+		r = /^#{Regexp.escape(input)}/
 
 		case current_line
 		when /^(set|desc)\s+/

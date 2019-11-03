@@ -41,7 +41,7 @@ module MainReadline
 
 			
 		else
-			@candidates.grep(/#{Regexp.escape(input)}/)
+			@candidates.grep(/^#{Regexp.escape(input)}/)
 		end
 	}
 

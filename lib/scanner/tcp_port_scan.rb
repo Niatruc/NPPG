@@ -3,7 +3,7 @@ require_relative '../support/kernel.rb'
 
 class TCPP
 	# TCP端口扫描
-	def self.tcp_port_scan(pcap, port_range=(0..1024))
+	def self.scan_ports(pcap, port_range=(0..1024))
 		dst_ip = arr_to_dot_dec(CONFIG[:victim_ip])
 		pcap.set_filter("src host #{dst_ip} and tcp")
 
