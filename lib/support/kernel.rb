@@ -134,7 +134,7 @@ module Kernel
 						config[md[2].to_sym] = eval(md[3])
 					end
 
-				when "run"
+				when /^(run|r)\s*$/
 					run {
 						blk.call(vars)
 					}
